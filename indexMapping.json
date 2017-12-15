@@ -1,12 +1,11 @@
-// Elasticsearch twitter index mapping
+// Elasticsearch 6.0 twitter index mapping (note only one type per index for this version)
 
-// Copy and paste everything below into kibana dev tools console to 
-// map a twitter index with types follow, tweet, and user
+// Copy and paste each command into the dev tools kibana console
+// to create indexes with mappings for follows, tweets, and users
 
-PUT twitter
-
+PUT follows
 {
-	"mapping": {
+	"mappings": {
 		"follow": {
 			"properties": {
 				"id": {
@@ -25,9 +24,15 @@ PUT twitter
           "type": "float"
         }
 			}
-		},
+		}
+  }
+}
 
+PUT tweets
+{ 
+  "mappings": {
     "tweet": {
+  
       "properties": {
         "id": {
           "type": "integer"
@@ -93,8 +98,13 @@ PUT twitter
           "type": "integer"
         }
       }
-    },
+    }
+  }
+}
 
+PUT users
+{
+  "mappings": {
     "user": {
       "properties": {
         "id": {
