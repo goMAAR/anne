@@ -1,0 +1,243 @@
+Elasticsearch twitter index mapping
+
+PUT twitter
+
+{
+	"mapping": {
+		"follow": {
+			"properties": {
+				"id": {
+					"type": "integer"
+				},
+
+				"follower_id": {
+					"type": "integer"
+				},
+
+				"followee_id": {
+					"type": "integer"
+				},
+
+        "engagement_rating": {
+          "type": "float"
+        }
+			}
+		},
+
+    "tweet": {
+      "properties": {
+        "id": {
+          "type": "integer"
+        },
+
+        "user_id": {
+          "type": "integer"
+        },
+
+        "created_at": {
+          "type": "date"
+        },
+
+        "text": {
+          "type": "text"
+        },
+
+        "coordinates": {
+          "type": "double"
+        }, 
+
+        "favorited": {
+          "type": "boolean"
+        },
+
+        "id_str": {
+          "type": "text"
+        },
+
+        "in_reply_to_screen_name": {
+          "type": "boolean"
+        },
+
+        "in_reply_to_status_id_str": {
+          "type": "text"
+        },
+
+        "in_reply_to_user_id": {
+          "type": "integer"
+        },
+
+        "in_reply_to_user_id_str": {
+          "type": "text"
+        },
+
+        "retweet_count": {
+          "type": "integer"
+        },
+
+        "retweeted": {
+          "type": "boolean"
+        },
+
+        "source": {
+          "type": "text"
+        },
+
+        "truncated": {
+          "type": "boolean"
+        },
+
+        "reply_count": {
+          "type": "integer"
+        }
+      }
+    },
+
+    "user": {
+      "properties": {
+        "id": {
+          "type": "integer"
+        },
+
+        "created_at": {
+          "type": "date"
+        },
+
+        "favorites_count": {
+          "type": "integer"
+        },
+
+        "followers_count": {
+          "type": "integer"
+        },
+
+        "following": {
+          "type": "boolean"
+        },
+
+        "contributors_enabled": {
+          "type": "boolean"
+        },
+
+        "default_profile": {
+          "type": "boolean"
+        },
+
+        "default_profile_image": {
+          "type": "boolean"
+        },
+
+        "description": {
+          "type": "text"
+        },
+
+        "follow_request_sent": {
+          "type": "boolean"
+        },
+
+        "friends_count": {
+          "type": "integer"
+        },
+
+        "id_str": {
+          "type": "text"
+        },
+
+        "is_translator": {
+          "type": "boolean"
+        },
+
+        "lang": {
+          "type": "text"
+        },
+
+        "listed_count": {
+          "type": "integer"
+        },
+
+        "name": {
+          "type": "text"
+        },
+
+        "notifications": {
+          "type": "boolean"
+        },
+
+        "profile_background_color": {
+          "type": "text"
+        },
+
+        "profile_background_image_url": {
+          "type": "text"
+        },
+
+        "profile_background_image_url_https": {
+          "type": "text"
+        },
+
+        "profile_background_tile": {
+          "type": "boolean"
+        },
+
+        "profile_image_url": {
+          "type": "text"
+        },
+
+        "profile_image_url_https": {
+          "type": "text"
+        },
+
+        "profile_link_color": {
+          "type": "text"
+        },
+
+        "profile_sidebar_border_color": {
+          "type": "text"
+        },
+
+        "profile_sidebar_fill_color": {
+          "type": "text"
+        },
+
+        "profile_text_color": {
+          "type": "text"
+        },
+
+        "profile_use_background_image": {
+          "type": "boolean"
+        },
+
+        "protected": {
+          "type": "boolean"
+        },
+
+        "screen_name": {
+          "type": "text"
+        },
+
+        "show_all_inline_media": {
+          "type": "boolean"
+        },
+
+        "statuses_count": {
+          "type": "integer"
+        },
+
+        "time_zone": {
+          "type": "text"
+        },
+
+        "url": {
+          "type": "text"
+        },
+
+        "utc_offset": {
+          "type": "integer"
+        },
+
+        "verified": {
+          "type": "boolean"
+        }
+      }
+    }
+	}
+}
