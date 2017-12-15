@@ -1,4 +1,7 @@
-Elasticsearch twitter index mapping
+// Elasticsearch twitter index mapping
+
+// Copy and paste everything below into kibana dev tools console to 
+// map a twitter index with types follow, tweet, and user
 
 PUT twitter
 
