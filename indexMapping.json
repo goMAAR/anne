@@ -43,39 +43,24 @@ PUT tweets
         },
 
         "created_at": {
-          "type": "date"
+          "type": "date",
+          "format": "EEE MMM d kk:mm:ss ZZ yyyy"
         },
 
         "text": {
           "type": "text"
         },
 
-        "coordinates": {
-          "type": "double"
-        }, 
-
         "favorited": {
           "type": "boolean"
-        },
-
-        "id_str": {
-          "type": "text"
         },
 
         "in_reply_to_screen_name": {
           "type": "boolean"
         },
 
-        "in_reply_to_status_id_str": {
-          "type": "text"
-        },
-
         "in_reply_to_user_id": {
           "type": "integer"
-        },
-
-        "in_reply_to_user_id_str": {
-          "type": "text"
         },
 
         "retweet_count": {
@@ -96,6 +81,18 @@ PUT tweets
 
         "reply_count": {
           "type": "integer"
+        },
+
+        "favorite_count": {
+          "type": "integer"
+        },
+
+        "possibly_sensitive": {
+          "type": "boolean"
+        },
+
+        "user_following": {
+          "type": "boolean"
         }
       }
     }
@@ -112,7 +109,8 @@ PUT users
         },
 
         "created_at": {
-          "type": "date"
+          "type": "date",
+          "format": "EEE MMM d kk:mm:ss ZZ yyyy"
         },
 
         "favorites_count": {
