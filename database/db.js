@@ -1,11 +1,25 @@
-const axios = require('axios');
+/* eslint-disable */
+const elasticsearch = require('elasticsearch');
 
-const data = JSON.stringify({
-// data to add to database
+const client = new elasticsearch.Client({
+  host: 'localhost:9200'
 });
 
-const  = () => {
-  // need endpoint specified
-  axios.put(`http://localhost:9200/`, data, { headers: { 'Content-Type': 'application/json' } })
-    .then((resp) => console.log('working, response:', resp)); 
-};
+// Simple ping to verify client is running
+// client.ping({
+//   requestTimeout: 1000
+// }, (err) => {
+//   err ? console.trace('elasticsearch cluster is down!') : console.log('all is well!');
+// });
+
+module.exports.client = client;
+
+// Simple query example: 
+
+// client.search({
+//   q: 'the'
+// }).then((resp) => {
+//   var hits = resp;
+//   console.log(hits);
+// }, (err) =>
+// console.log('error!', err));
