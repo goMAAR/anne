@@ -4,6 +4,7 @@ config/production.json
 config/staging.json
 config/test.json
 package-lock.json
+sqs_config.json
 
 # OS X
 .DS_Store
