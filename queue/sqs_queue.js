@@ -97,6 +97,7 @@ const receiveJob = (queueUrl, callback) => {
   });
 }
 
+// Uncomment to receive one job at a time
 // receiveJob(queueUrls.tweet, (message) => {
 //   console.log(message);
 // })

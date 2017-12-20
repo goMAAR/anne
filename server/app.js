@@ -1,13 +1,7 @@
 /*eslint-disable*/
-// var apm = require('elastic-apm-node').start({
-  // Set required app name (allowed characters: a-z, A-Z, 0-9, -, _, and space)
-  // appName: 'network-analytics'
-  // Use if APM Server requires a token
-  // secretToken: '',
-
-  // Set custom APM Server URL (default: http://localhost:8200)
-  // serverUrl: 'http://localhost:8200',
-// });
+var apm = require('elastic-apm-node').start({
+  appName: 'network-analytics'
+});
 const express = require('express');
 const app = express();
 const http = require('http').Server(app);
@@ -47,6 +41,6 @@ http.listen(3000, () => {
   console.log('listening on 3000');
 });
 
-// app.use(apm.middleware.express());
+app.use(apm.middleware.express());
 
 module.exports = app;
