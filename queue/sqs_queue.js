@@ -1,24 +1,26 @@
 /* eslint-disable */
 var AWS = require('aws-sdk');
-AWS.config.loadFromPath('../sqs_config.json');
+AWS.config.loadFromPath('./sqs_config.json');
+let sqs = new AWS.SQS();
+const Consumer = require('sqs-consumer');
 
-module.exports.sqs = new AWS.SQS();
-
-module.exports.queueUrls = {
+const queueUrls = {
   tweet: 'https://sqs.us-west-2.amazonaws.com/711011453741/tweet',
   follow: 'https://sqs.us-west-2.amazonaws.com/711011453741/follow',
   feed: 'https://sqs.us-west-2.amazonaws.com/711011453741/feed'
 }
 
-module.exports.buildParams = (queueUrl, messageBody) => {
+
+const buildParams = (queueUrl, messageBody) => {
   var params = {
-    MessageBody: messageBody,
-    QueueUrl: queueUrl
+    QueueUrl: queueUrl,
+    MessageBody: messageBody
   }; 
   return params;
 }
 
-module.exports.sendJob = (params) => {
+const sendJob = (params) => {
+  console.log('message that was sent:', params.MessageBody);
   sqs.sendMessage(params, (err, data) => {
     if(err) { console.log('error!', err);}
     else {
@@ -27,7 +29,44 @@ module.exports.sendJob = (params) => {
   });
 }
 
-module.exports.receiveJob = (queueUrl, callback) => {
+let url = queueUrls.tweet;
+let params = buildParams(url, 'hello tommy');
+// sendJob(params); uncomment to send a test message
+
+let tweetConsumer = Consumer.create({
+  queueUrl: queueUrls.tweet,
+  handleMessage: (message, done) => {
+    console.log('tweet consumer, message incoming!', message.Body);
+    // do some work here
+    done();
+  }
+})
+
+const followConsumer = Consumer.create({
+  queueUrl: queueUrls.follow,
+  handleMessage: (message, done) => {
+    console.log('follow consumer, message incoming!', message.Body);
+    // do some work
+    done();
+  }
+})
+
+let feedConsumer = Consumer.create({
+  queueUrl: queueUrls.feed,
+  handleMessage: (message, done) => {
+    console.log('feed consumer, message incoming!', message.Body);
+    // do some work
+    done();
+  }
+})
+
+module.exports.queueUrls = queueUrls;
+module.exports.tweetConsumer = tweetConsumer;
+module.exports.followConsumer = followConsumer;
+module.exports.feedConsumer = feedConsumer;
+
+// This can be ignored since consumers are being used. 
+const receiveJob = (queueUrl, callback) => {
   sqs.receiveMessage({
     QueueUrl: queueUrl
   }, (err, resp) => {
@@ -51,8 +90,13 @@ module.exports.receiveJob = (queueUrl, callback) => {
         callback(message);
       }
       catch (err) {
+        console.log(err);
         console.log('Queue is empty!  check back later');
       }   
     }
   });
 }
+
+// receiveJob(queueUrls.tweet, (message) => {
+//   console.log(message);
+// })
