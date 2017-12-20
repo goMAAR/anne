@@ -23,13 +23,12 @@
     "babel-cli": "^6.26.0",
     "babel-preset-latest": "^6.24.1",
     "body-parser": "^1.18.2",
-    "bookshelf": "^0.12.0",
     "elastic-apm-node": "^0.9.0",
     "elasticsearch": "^14.0.0",
     "express": "^4.16.2",
     "jsonfile": "^4.0.0",
-    "knex": "^0.14.2",
-    "moment": "^2.19.4"
+    "moment": "^2.19.4",
+    "sqs-consumer": "^3.8.0"
   },
   "devDependencies": {
     "babel-preset-env": "^1.6.1",
