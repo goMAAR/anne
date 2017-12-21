@@ -2,7 +2,7 @@
 const axios = require('axios');
 const jsonfile = require('jsonfile');
 const { fakeUser } = require('./fakeUser.js');
-const { fakeTweet } = require('./fakeTweet.js');
+const { fakeTweet, fakeSlimTweet } = require('./fakeTweet.js');
 const { fakeFollow } = require('./fakeFollow.js');
 const { client } = require('../database/db.js');
 const usersFile = './users.json';
@@ -121,6 +121,54 @@ const makeTweetsAndInsertIntoDatabase = () => {
   insertTweetsIntoDatabase(tweets);
 }
 
+// ======== Slim Tweet Generator Function =========
+var slimTweetRecordsInserted = 0;
+var numSlimTweetsToInsert = 6666600;
+
+const generateSlimTweetArray = (startIndex = 0, arraySize = 10000) => {
+  var arrayOfSlimTweets = [];
+
+  for(var i = startIndex; i < startIndex + arraySize; i++) {
+    let slimTweetMetaData = {
+      index: {
+        _id: i
+      }
+    };
+
+    let newSlimTweet = fakeSlimTweet(i);
+
+    arrayOfSlimTweets.push(slimTweetMetaData);
+    arrayOfSlimTweets.push(newSlimTweet);
+
+    slimTweetRecordsInserted++;
+    slimTweetRecordsInserted === numSlimTweetsToInsert ? i += arraySize : null;
+  }
+
+  return arrayOfSlimTweets;
+}
+
+const insertSlimTweetsIntoDatabase = (arrayOfSlimTweets) => {
+  client.bulk({
+    index: 'slimtweets',
+    type: 'tweet',
+    body: arrayOfSlimTweets
+  }, (err, resp) => {
+    if(err) { console.log(err); }
+    if (slimTweetRecordsInserted !== numSlimTweetsToInsert) {
+      setTimeout(makeSlimTweetsAndInsertIntoDatabase);
+    } else {
+      setTimeout(() => console.log('COMPLETE!!!!'));
+    }
+
+    slimTweetRecordsInserted % 10000 === 0 ? console.log(slimTweetRecordsInserted) : null;
+  }); 
+};
+
+const makeSlimTweetsAndInsertIntoDatabase = () => {
+  let slimTweets = generateSlimTweetArray(slimTweetRecordsInserted);
+  insertSlimTweetsIntoDatabase(slimTweets);
+}
+
 // ===== Follow generator functions ======
 var followRecordsInserted = 0;
 var numFollowsToInsert = 3333300;
@@ -169,6 +217,9 @@ const makeFollowsAndInsertIntoDatabase = () => {
 
 // ====== Inserts new follow records into the database =====
 // makeFollowsAndInsertIntoDatabase();
+
+// ====== Inserts new slim tweet records into the database ====== 
+// makeSlimTweetsAndInsertIntoDatabase();
 
 // ====== Inserts new tweet records into the database ====== //
 // makeTweetsAndInsertIntoDatabase();

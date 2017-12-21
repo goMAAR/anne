@@ -28,6 +28,28 @@ PUT follows
   }
 }
 
+PUT slimtweets
+{
+  "mappings": {
+    "tweet": {
+      "properties": {
+        "id": {
+          "type": "integer"
+        },
+
+        "author_id": {
+          "type": "integer"
+        },
+
+        "created_at": {
+          "type": "date",
+          "format": "EEE MMM d kk:mm:ss ZZ yyyy"
+        }
+      }
+    }
+  }
+}
+
 PUT tweets
 { 
   "mappings": {

@@ -73,4 +73,17 @@ const fakeTweet = (tweetID) => {
   return tweet;
 };
 
+const fakeSlimTweet = (tweetID) => {
+  let rand = Math.random();
+
+  let slimTweet = {
+    id: tweetID,
+    user_id: Math.floor(rand * 33333),
+    created_at: moment(faker.date.past()).format('ddd MMM D hh:mm:ss ZZ YYYY')
+  }
+
+  return slimTweet;
+}
+
+module.exports.fakeSlimTweet = fakeSlimTweet;
 module.exports.fakeTweet = fakeTweet;
