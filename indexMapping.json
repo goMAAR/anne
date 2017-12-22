@@ -16,11 +16,11 @@ PUT follows
 					"type": "integer"
 				},
 
-				"followee_id": {
+				"followed_id": {
 					"type": "integer"
 				},
 
-        "engagement_rating": {
+        "followed_influencer_ratio": {
           "type": "float"
         }
 			}
