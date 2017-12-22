@@ -3,8 +3,6 @@ const { fakeSlimTweet } = require('./fakeTweet.js');
 const { fakeFollow } = require('./fakeFollow.js');
 const { queueUrls, sendJob } = require('../queue/sqs_queue.js');
 
-// [complete] to do, write a script that loads fake tweets and follows
-// into a mock queue
 const loadQueue = (numRecords, queueUrl, mockThis) => {
   for(var i = 0; i < numRecords; i++) {
     let thing = mockThis(i);
@@ -16,6 +14,8 @@ const loadQueue = (numRecords, queueUrl, mockThis) => {
   }
 };
 
-loadQueue(10, queueUrls.mockTweet, fakeSlimTweet);
+// Invoke with ctrl + b or in the terminal with node loadQueues.js
+// with a few invokations of this function
 
-// [complete] other things to do: load up a ruby mock-sqs thing 
+// Example:
+// loadQueue(10, queueUrls.mockTweet, fakeSlimTweet);
