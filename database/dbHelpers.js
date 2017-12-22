@@ -68,7 +68,14 @@ const sortFollows = (follows, done) => {
       return 1;
     }
   });
-  console.log(follows);
+
+  getFeedAuthors(follows, done);
+};
+
+const getFeedAuthors = (follows, done) => {
+  let top5FollowRelationships = follows.slice(5);
+  let usersToBeInFeed = top5FollowRelationships.map((follow) => follow._source.followed_id);
+  console.log(usersToBeInFeed);
   done();
 };
 
