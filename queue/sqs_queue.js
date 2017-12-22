@@ -5,7 +5,12 @@
 // curl http://0.0.0.0:4568 -d "Action=CreateQueue&QueueName=tweet&AWSAccessKeyId=AKIAJRC2ZQKCJH6PM6HA"
 
 var AWS = require('aws-sdk');
-// AWS.config.loadFromPath('./sqs_config.json');
+const { accessKeyId, secretAccessKey, region } = require('./sqs_config.js');
+AWS.config = {
+  accessKeyId: accessKeyId, 
+  secretAccessKey: secretAccessKey, 
+  region: region
+}
 let sqs = new AWS.SQS();
 const Consumer = require('sqs-consumer');
 const { insertTweet, insertALotOfTweets, insertFollow } = require('../database/dbHelpers.js');
