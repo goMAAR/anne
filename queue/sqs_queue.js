@@ -13,7 +13,7 @@ AWS.config = {
 }
 let sqs = new AWS.SQS();
 const Consumer = require('sqs-consumer');
-const { insertTweet, insertALotOfTweets, insertFollow } = require('../database/dbHelpers.js');
+const { insertTweet, insertALotOfTweets, insertFollow, getFeed } = require('../database/dbHelpers.js');
 
 const queueUrls = {
   tweet: 'https://sqs.us-west-2.amazonaws.com/711011453741/tweet',
@@ -68,8 +68,8 @@ let feedConsumer = Consumer.create({
   queueUrl: queueUrls.mockFeed,
   handleMessage: (message, done) => {
     console.log('feed consumer, message incoming!', message.Body);
-    // do some work
-    done();
+    let user = JSON.parse(message.Body);
+    getFeed(user, done);
   }
 })
 
