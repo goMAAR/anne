@@ -1,6 +1,7 @@
 /*eslint-disable*/
 var apm = require('elastic-apm-node').start({
-  appName: 'network-analytics'
+  appName: 'network-analytics',
+  serverUrl: 'http://localhost:8200',
 });
 const express = require('express');
 const app = express();
@@ -13,28 +14,12 @@ const { tweetConsumer, feedConsumer, followConsumer } = require('../queue/sqs_qu
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 
-followConsumer.start();
-tweetConsumer.start();
-feedConsumer.start();
+// followConsumer.start();
+// tweetConsumer.start();
+// feedConsumer.start();
 
 app.get('/', (req, res) => {
-		res.sendStatus(200);
-});
-
-app.get('/feed', (req, res) => {
 	res.sendStatus(200);
-});
-
-app.post('/metrics', (req, res) => {
-	res.sendStatus(201);
-});
-
-app.post('/tweet/create', createTweet, (req, res) => {
-	res.sendStatus(201);
-});
-
-app.post('/user/create', (req, res) => {
-	res.sendStatus(201);
 });
 
 http.listen(3000, () => {
