@@ -23,7 +23,6 @@ const insertTweet = (tweet, done) => {
 }
 
 const insertFollow = (follow, done) => {
-  console.log('hitting, follow: ', follow);
   let { id, follower_id, followee_id, created_at } = follow;
   let record = {
     index: 'follows',
@@ -43,6 +42,12 @@ const insertFollow = (follow, done) => {
       done();
     }
   })
+}
+
+const getFeed = (user, done) => {
+  let { user_id } = user;
+  console.log('user:', user, 'user id:', user_id);
+  done(); 
 }
 
 // needs reworking
@@ -78,7 +83,8 @@ const insertALotOfTweets = (tweetArray) => {
 }
 
 module.exports.insertTweet = insertTweet;
-module.exports.insertALotOfTweets = insertALotOfTweets;
 module.exports.insertFollow = insertFollow;
+module.exports.getFeed = getFeed;
+module.exports.insertALotOfTweets = insertALotOfTweets;
 
 // helpers for creating documents and querying for data
