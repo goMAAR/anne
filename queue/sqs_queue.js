@@ -1,15 +1,30 @@
 /* eslint-disable */
+// Make fake queues with this curl command upon running fake-sqs
+// curl http://0.0.0.0:4568 -d "Action=CreateQueue&QueueName=feed&AWSAccessKeyId=AKIAJRC2ZQKCJH6PM6HA"
+// curl http://0.0.0.0:4568 -d "Action=CreateQueue&QueueName=follow&AWSAccessKeyId=AKIAJRC2ZQKCJH6PM6HA"
+// curl http://0.0.0.0:4568 -d "Action=CreateQueue&QueueName=tweet&AWSAccessKeyId=AKIAJRC2ZQKCJH6PM6HA"
+
 var AWS = require('aws-sdk');
-AWS.config.loadFromPath('./sqs_config.json');
+// AWS.config.loadFromPath('./sqs_config.json');
+AWS.config = {
+   
+  accessKeyId: "AKIAJRC2ZQKCJH6PM6HA", 
+  secretAccessKey: "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", 
+  region: "us-west-2" 
+
+}
 let sqs = new AWS.SQS();
 const Consumer = require('sqs-consumer');
+const { insertTweet, insertALotOfTweets, insertFollow } = require('../database/dbHelpers.js');
 
 const queueUrls = {
   tweet: 'https://sqs.us-west-2.amazonaws.com/711011453741/tweet',
   follow: 'https://sqs.us-west-2.amazonaws.com/711011453741/follow',
-  feed: 'https://sqs.us-west-2.amazonaws.com/711011453741/feed'
+  feed: 'https://sqs.us-west-2.amazonaws.com/711011453741/feed',
+  mockTweet: 'http://0.0.0.0:4568/tweet',
+  mockFollow: 'http://0.0.0.0:4568/follow',
+  mockFeed: 'http://0.0.0.0:4568/feed'
 }
-
 
 const buildParams = (queueUrl, messageBody) => {
   var params = {
@@ -29,30 +44,30 @@ const sendJob = (params) => {
   });
 }
 
-let url = queueUrls.tweet;
-let params = buildParams(url, 'hello tommy');
-// sendJob(params); uncomment to send a test message
+let url = queueUrls.mockTweet;
+let params = buildParams(url, 'hello world');
+// sendJob(params, 12345); // uncomment to send a test message
 
 let tweetConsumer = Consumer.create({
-  queueUrl: queueUrls.tweet,
+  queueUrl: queueUrls.mockTweet,
   handleMessage: (message, done) => {
     console.log('tweet consumer, message incoming!', message.Body);
-    // do some work here
-    done();
+    let msg = JSON.parse(message.Body);
+    insertTweet(msg, done);
   }
 })
 
 const followConsumer = Consumer.create({
-  queueUrl: queueUrls.follow,
+  queueUrl: queueUrls.mockFollow,
   handleMessage: (message, done) => {
     console.log('follow consumer, message incoming!', message.Body);
-    // do some work
-    done();
+    let msg = JSON.parse(message.Body);
+    insertFollow(msg, done);
   }
 })
 
 let feedConsumer = Consumer.create({
-  queueUrl: queueUrls.feed,
+  queueUrl: queueUrls.mockFeed,
   handleMessage: (message, done) => {
     console.log('feed consumer, message incoming!', message.Body);
     // do some work
@@ -61,6 +76,7 @@ let feedConsumer = Consumer.create({
 })
 
 module.exports.queueUrls = queueUrls;
+module.exports.sendJob = sendJob;
 module.exports.tweetConsumer = tweetConsumer;
 module.exports.followConsumer = followConsumer;
 module.exports.feedConsumer = feedConsumer;
