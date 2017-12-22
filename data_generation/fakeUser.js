@@ -55,4 +55,11 @@ const fakeUser = (userID) => {
   return user;
 };
 
+const fakeSlimUser = (userId) => {
+  return {
+    user_id: userId
+  }
+};
+
 module.exports.fakeUser = fakeUser;
+module.exports.fakeSlimUser = fakeSlimUser;
