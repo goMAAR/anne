@@ -46,9 +46,31 @@ const insertFollow = (follow, done) => {
 
 const getFeed = (user, done) => {
   let { user_id } = user;
-  console.log('user:', user, 'user id:', user_id);
-  done(); 
+  client.search({
+    index: 'follows',
+    q: 'follower_id:' + user_id
+  }, (err, resp) => {
+    if(err) { console.log(err); }
+    else {
+      sortFollows(resp.hits.hits, done);
+    }
+  })
 }
+
+const sortFollows = (follows, done) => {
+  follows.sort((a, b) => {
+    let aEngagement = parseFloat(a._source.engagement_rating);
+    let bEngagement = parseFloat(b._source.engagement_rating);
+
+    if(aEngagement - bEngagement > 0) {
+      return -1;
+    } else if (aEngagement - bEngagement < 0) {
+      return 1;
+    }
+  });
+  console.log(follows);
+  done();
+};
 
 // needs reworking
 const insertALotOfTweets = (tweetArray) => {
