@@ -6,13 +6,6 @@
 
 var AWS = require('aws-sdk');
 // AWS.config.loadFromPath('./sqs_config.json');
-AWS.config = {
-   
-  accessKeyId: "AKIAJRC2ZQKCJH6PM6HA", 
-  secretAccessKey: "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", 
-  region: "us-west-2" 
-
-}
 let sqs = new AWS.SQS();
 const Consumer = require('sqs-consumer');
 const { insertTweet, insertALotOfTweets, insertFollow } = require('../database/dbHelpers.js');
