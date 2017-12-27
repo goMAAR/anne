@@ -89,11 +89,27 @@ const getTweetsForFeed = (users, done, trans) => {
   }, (err, resp) => {
     if(err) { console.log(err); }
     else {
-      console.log('tweets found for top followed users', resp.hits.hits.length);
-      done();
-      trans.end();
+      finalizeFeed(resp.hits.hits, done, trans)
+      
     }
   })
+};
+
+const finalizeFeed = (tweets, done, trans) => {
+  tweets.sort((a, b) => {
+    let aTime = new Date(a._source.created_at);
+    let bTime = new Date(b._source.created_at);
+
+    if(aTime < bTime) {
+      return -1;
+    } else if(aTime > bTime) {
+      return 1;
+    }
+  });
+
+  let result = tweets.slice(0, 200);
+  done();
+  trans.end();
 };
 
 // needs reworking
@@ -132,5 +148,3 @@ module.exports.insertTweet = insertTweet;
 module.exports.insertFollow = insertFollow;
 module.exports.getFeed = getFeed;
 module.exports.insertALotOfTweets = insertALotOfTweets;
-
-// helpers for creating documents and querying for data
