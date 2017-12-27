@@ -1,7 +1,7 @@
 /* eslint-disable */
 const { client } = require('./db.js');
 
-const insertTweet = (tweet, done) => {
+const insertTweet = (tweet, done, trans) => {
   let { id, user_id, created_at } = tweet;
   let record = {
     index: 'slimtweets',
@@ -18,11 +18,12 @@ const insertTweet = (tweet, done) => {
     else {
       console.log('record inserted successfully, record:', tweet);
       done();
+      trans.end();
     }
   });
 }
 
-const insertFollow = (follow, done) => {
+const insertFollow = (follow, done, trans) => {
   let { id, follower_id, followee_id, created_at } = follow;
   let record = {
     index: 'follows',
@@ -38,13 +39,14 @@ const insertFollow = (follow, done) => {
   client.create(record, (err, resp) => {
     if(err) { console.log(err); }
     else {
-      console.log('record inserted successfully, record:', resp);
+      console.log('record inserted successfully, record: ', resp);
       done();
+      trans.end();      
     }
-  })
+  });
 }
 
-const getFeed = (user, done) => {
+const getFeed = (user, done, trans) => {
   let { user_id } = user;
   client.search({
     index: 'follows',
@@ -52,12 +54,12 @@ const getFeed = (user, done) => {
   }, (err, resp) => {
     if(err) { console.log(err); }
     else {
-      sortFollows(resp.hits.hits, done);
+      sortFollows(resp.hits.hits, done, trans);
     }
   })
 }
 
-const sortFollows = (follows, done) => {
+const sortFollows = (follows, done, trans) => {
   follows.sort((a, b) => {
     let aEngagement = parseFloat(a._source.engagement_rating);
     let bEngagement = parseFloat(b._source.engagement_rating);
@@ -68,15 +70,30 @@ const sortFollows = (follows, done) => {
       return 1;
     }
   });
-
-  getFeedAuthors(follows, done);
+  getFeedAuthors(follows, done, trans);
 };
 
-const getFeedAuthors = (follows, done) => {
-  let top5FollowRelationships = follows.slice(5);
+const getFeedAuthors = (follows, done, trans) => {
+  let top5FollowRelationships = follows.slice(0, 5);
   let usersToBeInFeed = top5FollowRelationships.map((follow) => follow._source.followed_id);
-  console.log(usersToBeInFeed);
-  done();
+  getTweetsForFeed(usersToBeInFeed, done, trans);
+};
+
+const getTweetsForFeed = (users, done, trans) => {
+  let userIds = users.map(user=> user).join(' OR ');
+  client.search({
+    index: 'slimtweets',
+    type: 'tweet',
+    q: 'user_id: ' + userIds,
+    size: 10000
+  }, (err, resp) => {
+    if(err) { console.log(err); }
+    else {
+      console.log('tweets found for top followed users', resp.hits.hits.length);
+      done();
+      trans.end();
+    }
+  })
 };
 
 // needs reworking
