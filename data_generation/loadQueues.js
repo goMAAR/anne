@@ -19,11 +19,14 @@ const loadQueue = (numRecords, queueUrl, mockThis, startIndex = 0) => {
 // with a few invokations of this function
 
 // Load 10 follows and save in elasticsearch:
-// loadQueue(10, queueUrls.mockFollow, fakeFollow);
+loadQueue(10, queueUrls.mockFollow, fakeFollow);
 
 // Load 10 tweets and save in elasticsearch:
-// loadQueue(10, queueUrls.mockTweet, fakeSlimTweet);
+// loadQueue(100, queueUrls.mockTweet, fakeSlimTweet);
 
 // Load a random user, produce a feed:
-let rand = Math.floor(Math.random() * 33333);
-loadQueue(1, queueUrls.mockFeed, fakeSlimUser, rand);
+// for(var i = 0; i < 1; i++) {
+// 	let rand = Math.floor(Math.random() * 33333);
+// 	loadQueue(1, queueUrls.mockFeed, fakeSlimUser, rand);
+	
+// }
