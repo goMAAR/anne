@@ -28,6 +28,7 @@
     "express": "^4.16.2",
     "jsonfile": "^4.0.0",
     "moment": "^2.19.4",
+    "simple-sqs": "^1.0.0",
     "sqs-consumer": "^3.8.0"
   },
   "devDependencies": {
