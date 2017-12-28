@@ -73,11 +73,13 @@ let feedConsumer = Consumer.create({
   }
 })
 
+module.exports.sqs = sqs;
 module.exports.queueUrls = queueUrls;
 module.exports.sendJob = sendJob;
 module.exports.tweetConsumer = tweetConsumer;
 module.exports.followConsumer = followConsumer;
 module.exports.feedConsumer = feedConsumer;
+
 
 // This can be ignored since consumers are being used. 
 const receiveJob = (queueUrl, callback) => {
