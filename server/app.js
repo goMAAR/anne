@@ -17,7 +17,7 @@ tweetQueue.on('message', (msg, done) => {
   let type = 'tweet';
   let trans = apm.startTransaction(name, type);
   insertTweet(msg.Body, done, trans);
-});
+}); 
 
 followQueue.on('message', (msg, done) => {
   let name = 'follow-queue';
@@ -27,15 +27,28 @@ followQueue.on('message', (msg, done) => {
 });
 
 feedQueue.on('message', (msg, done) => {
-  let name = 'feed-queue';
-  let type = 'feed';
-  let trans = apm.startTransaction(name, type);
-  getFeed(msg.Body, done, trans);
+  let messagePresent = null;
+  try {
+    messagePresent = msg.Body.user_id;
+  } catch(e) {
+    console.log('handling artillery start or stop request');
+  }
+  if(messagePresent) {
+    console.log('messagePresent variable', messagePresent);
+    let name = 'feed-queue';
+    let type = 'feed';
+    let trans = apm.startTransaction(name, type);
+    getFeed(msg.Body, done, trans);
+  }
 });
 
 tweetQueue.on('error', function (err) {
-  apm.captureError(err)
+  apm.captureError(err);
 });
+
+followQueue.on('error', function(err) {
+  apm.captureError(err);
+})
 
 feedQueue.on('error', function(err) {
   apm.captureError(err);
