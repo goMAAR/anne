@@ -15,10 +15,12 @@ config:
     - duration: 60
       arrivalRate: 500
       name: "Sustained max"
+  payload:
+    - path: "./users.csv"
+      fields:
+        - "user_id"
 scenarios:
   - flow:
     - post:
         url: "/"
-        body: "Action=SendMessage&QueueUrl=http%3A%2F%2F0.0.0.0%3A4568%2Ffeed&MessageBody=%7B%22user_id%22%3A%20%2216790%22%7D&AWSAccessKeyId=AKIAJ3XFODIIRQAJONXA"
-
-        
+        body: "{{user_id}}"
