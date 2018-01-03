@@ -1,0 +1,15 @@
+config:
+  target: 'http://0.0.0.0:4568'
+  phases:
+    - duration: 5
+      arrivalRate: 3
+      name: "Warm up"
+  payload:
+    - path: "./users.csv"
+      fields:
+        - "user_id"
+scenarios:
+  - flow:
+    - post:
+        url: "/"
+        body: "{{user_id}}"
