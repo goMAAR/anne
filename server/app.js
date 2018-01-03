@@ -1,31 +1,42 @@
 /*eslint-disable*/
 var apm = require('elastic-apm-node').start({
   appName: 'network-analytics',
-  serverUrl: 'http://localhost:8200',
+  serverUrl: 'http://localhost:8200'
 });
-const express = require('express');
-const app = express();
-const http = require('http').Server(app);
-const bodyParser = require('body-parser');
-const { createTweet } = require('../database/dbHelpers.js');
-const axios = require('axios');
-const { tweetConsumer, feedConsumer, followConsumer } = require('../queue/sqs_queue.js');
+var sqs = require('simple-sqs')();
 
-app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({ extended: false }));
+const { insertTweet, insertFollow, getFeed } = require('../database/dbHelpers.js');
+const { queueUrls } = require('../queue/sqs_queue.js');
 
-// followConsumer.start();
-// tweetConsumer.start();
-// feedConsumer.start();
+const tweetQueue = sqs(queueUrls.mockTweet);
+const feedQueue = sqs(queueUrls.mockFeed);
+const followQueue = sqs(queueUrls.mockFollow);
 
-app.get('/', (req, res) => {
-	res.sendStatus(200);
+tweetQueue.on('message', (msg, done) => {
+  let name = 'tweet-queue';
+  let type = 'tweet';
+  let trans = apm.startTransaction(name, type);
+  insertTweet(msg.Body, done, trans);
 });
 
-http.listen(3000, () => {
-  console.log('listening on 3000');
+followQueue.on('message', (msg, done) => {
+  let name = 'follow-queue';
+  let type = 'follow';
+  let trans = apm.startTransaction(name, type);
+  insertFollow(msg.Body, done, trans);
 });
 
-app.use(apm.middleware.express());
+feedQueue.on('message', (msg, done) => {
+  let name = 'feed-queue';
+  let type = 'feed';
+  let trans = apm.startTransaction(name, type);
+  getFeed(msg.Body, done, trans);
+});
 
-module.exports = app;
+tweetQueue.on('error', function (err) {
+  apm.captureError(err)
+});
+
+feedQueue.on('error', function(err) {
+  apm.captureError(err);
+})

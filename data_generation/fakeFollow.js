@@ -6,8 +6,8 @@ const fakeFollow = (followID) => {
   let follow = {
   	id: followID,
     follower_id: Math.floor(rand1 * 33333),
-    followee_id: Math.floor(rand2 * 33333),
-    engagement_rating: Math.random().toFixed(2)
+    followed_id: Math.floor(rand2 * 33333),
+    followed_influencer_ratio: Math.random().toFixed(2)
   }
 
   return follow;
