@@ -1,7 +1,7 @@
 /* eslint-disable */
 const axios = require('axios');
 const jsonfile = require('jsonfile');
-const { fakeUser } = require('./fakeUser.js');
+const { fakeUser, fakeSlimUser } = require('./fakeUser.js');
 const { fakeTweet, fakeSlimTweet } = require('./fakeTweet.js');
 const { fakeFollow } = require('./fakeFollow.js');
 const { client } = require('../database/db.js');
@@ -55,14 +55,14 @@ const makeUsersAndInsertIntoDatabase = () => {
   insertUsersIntoDatabase(users);
 }
 
-const generateUsers = (userQty = 33333) => {
+const generateUsersJSONFile = (userQty = 33333) => {
   for(var i = 0; i < userQty; i++) {
     let userMetadata = {
       index: {
         _id: i
       }
     };
-    let newUser = fakeUser(i);
+    let newUser = fakeSlimUser(i);
     jsonfile.writeFileSync(usersFile, userMetadata, { spaces:0, EOL: '\r\n', flag: 'a'});
     jsonfile.writeFileSync(usersFile, newUser, { spaces: 0, EOL: '\r\n', flag: 'a'}, (err) => {
       if(err) { console.log(err)}
@@ -226,7 +226,7 @@ const makeFollowsAndInsertIntoDatabase = () => {
 
 // ====== Generate a users.json file, insert using curl command (< 100,000 users)======
 // curl -H 'Content-Type: application/x-ndjson' -XPOST 'localhost:9200/users/user/_bulk?pretty' --data-binary @users.json
-// generateUsers(); // default is 33,333, pass in value to be more specific if desired, larger quantities
+// generateUsersJSONFile(); // default is 33,333, pass in value to be more specific if desired, larger quantities
 
 // ====== Generate users (> 100,000) with script (modify config vars above functions) =========
 // makeUsersAndInsertIntoDatabase();
