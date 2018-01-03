@@ -1,11 +1,13 @@
 /* eslint-disable */
 const axios = require('axios');
 const jsonfile = require('jsonfile');
+const fs = require('fs');
 const { fakeUser, fakeSlimUser } = require('./fakeUser.js');
 const { fakeTweet, fakeSlimTweet } = require('./fakeTweet.js');
 const { fakeFollow } = require('./fakeFollow.js');
 const { client } = require('../database/db.js');
-const usersFile = './users.json';
+const usersJSONFile = './users.json';
+const usersCSVFile = './users.csv';
 const tweetsFile = './tweets1.json';
 
 // ========= User generator function ==========
@@ -70,8 +72,22 @@ const generateUsersJSONFile = (userQty = 33333) => {
 
     i % 5000 === 0 ? console.log('inserting user with id', i) : null;
   }
-}
+};
 
+const generateUsersCSVFile = (userQty = 33333) => {
+  var stream = fs.createWriteStream(usersCSVFile, { flags: 'a', encoding: null, mode: 0o666});
+  stream.once('open', (fd) => {
+    for(var i = 1; i <= userQty; i++) {
+      let urlEncodedString = 'Action=SendMessage&QueueUrl=http%3A%2F%2F0.0.0.0%3A4568%2Ffeed&MessageBody=%7B%22user_id%22%3A%20%22' + i + '%22%7D&AWSAccessKeyId=AKIAJ3XFODIIRQAJONXA';
+      stream.write(urlEncodedString + '\n');
+
+      i % 5000 === 0 ? console.log(i) : null;
+    }
+
+    stream.end();
+    console.log('COMPLETE!');
+  });
+};
 
 // ======== Tweet generator functions ==========
 var tweetRecordsInserted = 0; // starts the id's at 0, incremented each record, everything stops once it equals numTweetsToInsert
@@ -228,6 +244,8 @@ const makeFollowsAndInsertIntoDatabase = () => {
 // curl -H 'Content-Type: application/x-ndjson' -XPOST 'localhost:9200/users/user/_bulk?pretty' --data-binary @users.json
 // generateUsersJSONFile(); // default is 33,333, pass in value to be more specific if desired, larger quantities
 
+// ====== Generate a users.csv file (used in artillery yaml file) ======
+generateUsersCSVFile();
 // ====== Generate users (> 100,000) with script (modify config vars above functions) =========
 // makeUsersAndInsertIntoDatabase();
 
