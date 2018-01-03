@@ -1,0 +1,24 @@
+config:
+  target: 'http://0.0.0.0:4568'
+  phases:
+    - duration: 30
+      arrivalRate: 1
+      rampTo: 100
+      name: "Warm up"
+    - duration: 60
+      arrivalRate: 100
+      name: "Sustained light load"
+    - duration: 30
+      arrivalRate: 100
+      rampTo: 500
+      name: "Warm up to max load"
+    - duration: 60
+      arrivalRate: 500
+      name: "Sustained max"
+scenarios:
+  - flow:
+    - post:
+        url: "/"
+        body: "Action=SendMessage&QueueUrl=http%3A%2F%2F0.0.0.0%3A4568%2Ffeed&MessageBody=%7B%22user_id%22%3A%20%2216790%22%7D&AWSAccessKeyId=AKIAJ3XFODIIRQAJONXA"
+
+        
